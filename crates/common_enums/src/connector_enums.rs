@@ -144,6 +144,7 @@ pub enum RoutableConnectors {
     Recurly,
     Redsys,
     Riskified,
+    Riskified2,
     Santander,
     Shift4,
     Signifyd,
@@ -346,6 +347,7 @@ pub enum Connector {
     Signifyd,
     Plaid,
     Riskified,
+    Riskified2,
     Xendit,
     Zen,
     Zsl,
@@ -532,6 +534,7 @@ impl Connector {
             | Self::Plaid
             | Self::Razorpay
             | Self::Riskified
+            | Self::Riskified2
             | Self::Threedsecureio
             | Self::Netcetera
             | Self::CtpMastercard
@@ -680,6 +683,7 @@ impl From<RoutableConnectors> for Connector {
             RoutableConnectors::Recurly => Self::Recurly,
             RoutableConnectors::Redsys => Self::Redsys,
             RoutableConnectors::Riskified => Self::Riskified,
+            RoutableConnectors::Riskified2 => Self::Riskified2,
             RoutableConnectors::Santander => Self::Santander,
             RoutableConnectors::Shift4 => Self::Shift4,
             RoutableConnectors::Signifyd => Self::Signifyd,
@@ -811,6 +815,7 @@ impl TryFrom<Connector> for RoutableConnectors {
             Connector::Rapyd => Ok(Self::Rapyd),
             Connector::Razorpay => Ok(Self::Razorpay),
             Connector::Riskified => Ok(Self::Riskified),
+            Connector::Riskified2 => Ok(Self::Riskified2),
             Connector::Santander => Ok(Self::Santander),
             Connector::Shift4 => Ok(Self::Shift4),
             Connector::Signifyd => Ok(Self::Signifyd),

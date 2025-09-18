@@ -59,6 +59,9 @@ impl FraudCheckConnectorData {
             enums::FrmConnectors::Riskified => {
                 Ok(ConnectorEnum::Old(Box::new(connector::Riskified::new())))
             }
+            enums::FrmConnectors::Riskified2 => {
+                Ok(ConnectorEnum::Old(Box::new(connector::Riskified2::new())))
+            }
         }
     }
 }

@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="AMLWebService" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="AMLWebService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="AMLWebService">
+      <s:element name="AMLCheckPayment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Client" type="tns:AMLClient" />
+          <s:element minOccurs="0" maxOccurs="1" name="Payer" type="tns:AMLPayer" />
+          <s:element minOccurs="0" maxOccurs="1" name="Beneficiary" type="tns:AMLBeneficiary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Person" type="tns:AMLPerson" />
+          <s:element minOccurs="0" maxOccurs="1" name="CRC" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ServiceID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChannelID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OuterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PosCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShowFullData" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PCRC" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AMLClient">
+        <s:attribute name="Culture" type="s:string" />
+        <s:attribute name="Login" type="s:string" />
+        <s:attribute name="Hash" type="s:string" />
+      </s:complexType>
+      <s:complexType name="AMLPayer">
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="Account" type="s:string" />
+        <s:attribute name="Type" type="tns:EnumPayerType" use="required" />
+        <s:attribute name="OuterId" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="EnumPayerType">
+        <s:restriction base="s:string">
+          <s:enumeration value="WebMoney" />
+          <s:enumeration value="PseudoIdentified" />
+          <s:enumeration value="AuthorizedUser" />
+          <s:enumeration value="Undefined" />
+          <s:enumeration value="NotAggregate" />
+          <s:enumeration value="NotIdentPurse" />
+          <s:enumeration value="SimpleIdentPurse" />
+          <s:enumeration value="IdentPurse" />
+          <s:enumeration value="PayoutsWMUser" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="AMLBeneficiary">
+        <s:attribute name="OuterId" type="s:string" />
+        <s:attribute name="Account" type="s:string" />
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="Type" type="tns:EnumPayerType" use="required" />
+      </s:complexType>
+      <s:complexType name="AMLPerson">
+        <s:attribute name="Type" type="tns:EnumPersonType" use="required" />
+        <s:attribute name="FirstName" type="s:string" />
+        <s:attribute name="LastName" type="s:string" />
+        <s:attribute name="DocNumber" type="s:string" />
+        <s:attribute name="DocCountry" type="s:string" />
+        <s:attribute name="ResidencyCountry" type="s:string" />
+        <s:attribute name="DateOfBirth" type="s:dateTime" use="required" />
+        <s:attribute name="Account" type="s:string" />
+        <s:attribute name="IP" type="s:string" />
+        <s:attribute name="FullAddress" type="s:string" />
+        <s:attribute name="City" type="s:string" />
+        <s:attribute name="Postal" type="s:string" />
+        <s:attribute name="Phone" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="EnumPersonType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Individual" />
+          <s:enumeration value="Entity" />
+          <s:enumeration value="Undefined" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="AMLCheckPaymentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AMLCheckPaymentResult" type="tns:AMLResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="tns:EnumResult" />
+          <s:element minOccurs="1" maxOccurs="1" name="ErrorCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorCodeExt" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorText" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Ticket" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultExt" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplySpecialFee" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrevChannelID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChannelID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StructuredErrorText" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AppliedLimits" type="tns:AppliedLimits" />
+          <s:element minOccurs="0" maxOccurs="1" name="AvailableAmount" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="AvailableCount" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="EnumResult">
+        <s:restriction base="s:string">
+          <s:enumeration value="InnerError" />
+          <s:enumeration value="Success" />
+          <s:enumeration value="Warning" />
+          <s:enumeration value="Fail" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="AppliedLimits">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Limit" type="tns:Limit" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Limit">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RaiseType" type="tns:EnumRaiseType" />
+        </s:sequence>
+        <s:attribute name="Id" type="s:int" use="required" />
+        <s:attribute name="Priority" type="s:int" use="required" />
+        <s:attribute name="Description" type="s:string" />
+        <s:attribute name="Result" type="tns:EnumResult" use="required" />
+        <s:attribute name="Period" type="tns:EnumPeriodType" use="required" />
+        <s:attribute name="PeriodDays" type="s:int" />
+        <s:attribute name="AgregateAmount" type="s:decimal" use="required" />
+        <s:attribute name="Currency" type="s:string" />
+        <s:attribute name="AgregateOn" type="s:string" />
+        <s:attribute name="LimitAmount" type="s:decimal" />
+        <s:attribute name="AvailableAmount" type="s:decimal" />
+        <s:attribute name="AvailableCount" type="s:int" />
+        <s:attribute name="LimitPercent" type="s:int" />
+        <s:attribute name="CountPercent" type="s:int" />
+        <s:attribute name="AgregateAmountPrev" type="s:decimal" />
+        <s:attribute name="AgregateCount" type="s:int" />
+        <s:attribute name="AgregateCountPrev" type="s:int" />
+      </s:complexType>
+      <s:simpleType name="EnumRaiseType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Null" />
+          <s:enumeration value="TotalAmount" />
+          <s:enumeration value="TotalCount" />
+          <s:enumeration value="PercentAmount" />
+          <s:enumeration value="PercentCount" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="EnumPeriodType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Deal" />
+          <s:enumeration value="Day" />
+          <s:enumeration value="Week" />
+          <s:enumeration value="Month" />
+          <s:enumeration value="Year" />
+          <s:enumeration value="CustomDays" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="AMLMakePayment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AMLMakePaymentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AMLMakePaymentResult" type="tns:AMLResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckPEP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckPEPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckPEPResult" type="tns:AMLResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckWatchBlack">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckWatchBlackResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckWatchBlackResult" type="tns:AMLResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckCTF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckCTFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckCTFResult" type="tns:AMLResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AMLRollbackPayment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLRollbackRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLRollbackRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Client" type="tns:AMLClient" />
+          <s:element minOccurs="1" maxOccurs="1" name="Amount" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ServiceID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChannelID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OuterID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AMLRollbackPaymentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AMLRollbackPaymentResult" type="tns:AMLRollbackResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLRollbackResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="tns:EnumResult" />
+          <s:element minOccurs="1" maxOccurs="1" name="ErrorCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorCodeExt" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorText" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultExt" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AddToWhiteList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLWhiteListRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLWhiteListRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Client" type="tns:AMLWhiteListClient" />
+          <s:element minOccurs="0" maxOccurs="1" name="Ticket" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Officer" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UseService" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AMLWhiteListClient">
+        <s:attribute name="Culture" type="s:string" />
+        <s:attribute name="Login" type="s:string" />
+        <s:attribute name="Hash" type="s:string" />
+      </s:complexType>
+      <s:element name="AddToWhiteListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddToWhiteListResult" type="tns:AMLWhiteListResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AMLWhiteListResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="tns:EnumResult" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="StatusCode" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="UpdatedCount" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AddedCount" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="DeletedCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddedPersons" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeletedPersons" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorText" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DeleteFromWhiteList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:AMLWhiteListRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFromWhiteListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteFromWhiteListResult" type="tns:AMLWhiteListResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AMLCheckPaymentSoapIn">
+    <wsdl:part name="parameters" element="tns:AMLCheckPayment" />
+  </wsdl:message>
+  <wsdl:message name="AMLCheckPaymentSoapOut">
+    <wsdl:part name="parameters" element="tns:AMLCheckPaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="AMLMakePaymentSoapIn">
+    <wsdl:part name="parameters" element="tns:AMLMakePayment" />
+  </wsdl:message>
+  <wsdl:message name="AMLMakePaymentSoapOut">
+    <wsdl:part name="parameters" element="tns:AMLMakePaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckPEPSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckPEP" />
+  </wsdl:message>
+  <wsdl:message name="CheckPEPSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckPEPResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckWatchBlackSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckWatchBlack" />
+  </wsdl:message>
+  <wsdl:message name="CheckWatchBlackSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckWatchBlackResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckCTFSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckCTF" />
+  </wsdl:message>
+  <wsdl:message name="CheckCTFSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckCTFResponse" />
+  </wsdl:message>
+  <wsdl:message name="AMLRollbackPaymentSoapIn">
+    <wsdl:part name="parameters" element="tns:AMLRollbackPayment" />
+  </wsdl:message>
+  <wsdl:message name="AMLRollbackPaymentSoapOut">
+    <wsdl:part name="parameters" element="tns:AMLRollbackPaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddToWhiteListSoapIn">
+    <wsdl:part name="parameters" element="tns:AddToWhiteList" />
+  </wsdl:message>
+  <wsdl:message name="AddToWhiteListSoapOut">
+    <wsdl:part name="parameters" element="tns:AddToWhiteListResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFromWhiteListSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteFromWhiteList" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFromWhiteListSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteFromWhiteListResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AMLWSSoap">
+    <wsdl:operation name="AMLCheckPayment">
+      <wsdl:input message="tns:AMLCheckPaymentSoapIn" />
+      <wsdl:output message="tns:AMLCheckPaymentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AMLMakePayment">
+      <wsdl:input message="tns:AMLMakePaymentSoapIn" />
+      <wsdl:output message="tns:AMLMakePaymentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckPEP">
+      <wsdl:input message="tns:CheckPEPSoapIn" />
+      <wsdl:output message="tns:CheckPEPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckWatchBlack">
+      <wsdl:input message="tns:CheckWatchBlackSoapIn" />
+      <wsdl:output message="tns:CheckWatchBlackSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckCTF">
+      <wsdl:input message="tns:CheckCTFSoapIn" />
+      <wsdl:output message="tns:CheckCTFSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AMLRollbackPayment">
+      <wsdl:input message="tns:AMLRollbackPaymentSoapIn" />
+      <wsdl:output message="tns:AMLRollbackPaymentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddToWhiteList">
+      <wsdl:input message="tns:AddToWhiteListSoapIn" />
+      <wsdl:output message="tns:AddToWhiteListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFromWhiteList">
+      <wsdl:input message="tns:DeleteFromWhiteListSoapIn" />
+      <wsdl:output message="tns:DeleteFromWhiteListSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AMLWSSoap" type="tns:AMLWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AMLCheckPayment">
+      <soap:operation soapAction="AMLWebService/AMLCheckPayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AMLMakePayment">
+      <soap:operation soapAction="AMLWebService/AMLMakePayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckPEP">
+      <soap:operation soapAction="AMLWebService/CheckPEP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckWatchBlack">
+      <soap:operation soapAction="AMLWebService/CheckWatchBlack" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckCTF">
+      <soap:operation soapAction="AMLWebService/CheckCTF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AMLRollbackPayment">
+      <soap:operation soapAction="AMLWebService/AMLRollbackPayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToWhiteList">
+      <soap:operation soapAction="AMLWebService/AddToWhiteList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFromWhiteList">
+      <soap:operation soapAction="AMLWebService/DeleteFromWhiteList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AMLWSSoap12" type="tns:AMLWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AMLCheckPayment">
+      <soap12:operation soapAction="AMLWebService/AMLCheckPayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AMLMakePayment">
+      <soap12:operation soapAction="AMLWebService/AMLMakePayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckPEP">
+      <soap12:operation soapAction="AMLWebService/CheckPEP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckWatchBlack">
+      <soap12:operation soapAction="AMLWebService/CheckWatchBlack" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckCTF">
+      <soap12:operation soapAction="AMLWebService/CheckCTF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AMLRollbackPayment">
+      <soap12:operation soapAction="AMLWebService/AMLRollbackPayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToWhiteList">
+      <soap12:operation soapAction="AMLWebService/AddToWhiteList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFromWhiteList">
+      <soap12:operation soapAction="AMLWebService/DeleteFromWhiteList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AMLWS">
+    <wsdl:port name="AMLWSSoap" binding="tns:AMLWSSoap">
+      <soap:address location="http://172.16.52.34/AML_PaymasterNew/AMLWS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AMLWSSoap12" binding="tns:AMLWSSoap12">
+      <soap12:address location="http://172.16.52.34/AML_PaymasterNew/AMLWS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

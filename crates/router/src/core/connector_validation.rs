@@ -534,6 +534,10 @@ impl ConnectorAuthTypeAndMetadataValidation<'_> {
                 riskified::transformers::RiskifiedAuthType::try_from(self.auth_type)?;
                 Ok(())
             }
+            api_enums::Connector::Riskified2 => {
+                riskified2::transformers::Riskified2AuthType::try_from(self.auth_type)?;
+                Ok(())
+            }
             api_enums::Connector::Plaid => {
                 PlaidAuthType::foreign_try_from(self.auth_type)?;
                 Ok(())

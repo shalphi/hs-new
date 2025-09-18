@@ -133,6 +133,11 @@ impl ForeignTryFrom<api_enums::Connector> for common_enums::RoutableConnectors {
                     message: "riskified is not a routable connector".to_string(),
                 })?
             }
+            api_enums::Connector::Riskified2 => {
+                Err(common_utils::errors::ValidationError::InvalidValue {
+                    message: "riskified2 is not a routable connector".to_string(),
+                })?
+            }
             api_enums::Connector::Square => Self::Square,
             api_enums::Connector::Stax => Self::Stax,
             api_enums::Connector::Stripe => Self::Stripe,

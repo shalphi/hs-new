@@ -43,6 +43,20 @@ services:
       start_period: 5s
       timeout: 5s
 
+  # Adminer for database management
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    networks:
+      - router_net
+    depends_on:
+      pg:
+        condition: service_healthy
+    environment:
+      - ADMINER_DEFAULT_SERVER=pg
+    restart: unless-stopped
+
   redis-standalone:
     image: redis:7
     networks:

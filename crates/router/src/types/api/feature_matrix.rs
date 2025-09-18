@@ -380,6 +380,9 @@ impl FeatureMatrixConnectorData {
                 enums::Connector::Riskified => {
                     Ok(ConnectorEnum::Old(Box::new(connector::Riskified::new())))
                 }
+                enums::Connector::Riskified2 => {
+                    Ok(ConnectorEnum::Old(Box::new(connector::Riskified2::new())))
+                }
                 enums::Connector::Gpayments => {
                     Ok(ConnectorEnum::Old(Box::new(connector::Gpayments::new())))
                 }
