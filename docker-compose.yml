@@ -44,18 +44,18 @@ services:
       timeout: 5s
 
   # Adminer for database management
-  adminer:
-    image: adminer:latest
-    ports:
-      - "8081:8080"
-    networks:
-      - router_net
-    depends_on:
-      pg:
-        condition: service_healthy
-    environment:
-      - ADMINER_DEFAULT_SERVER=pg
-    restart: unless-stopped
+  # adminer:
+  #   image: adminer:latest
+  #   ports:
+  #     - "8081:8080"
+  #   networks:
+  #     - router_net
+  #   depends_on:
+  #     pg:
+  #       condition: service_healthy
+  #   environment:
+  #     - ADMINER_DEFAULT_SERVER=pg
+  #   restart: unless-stopped
 
   redis-standalone:
     image: redis:7
@@ -225,11 +225,11 @@ services:
   create-default-user:
     image: curlimages/curl-base:latest
     container_name: create-default-user
-    depends_on:
-      hyperswitch-server:
-        condition: service_healthy 
-      hyperswitch-control-center:
-        condition: service_started
+    # depends_on:
+    #   hyperswitch-server:
+    #     condition: service_healthy 
+    #   hyperswitch-control-center:
+    #     condition: service_started
     environment:
       - HYPERSWITCH_SERVER_URL=http://hyperswitch-server:8080
       - HYPERSWITCH_CONTROL_CENTER_URL=http://hyperswitch-control-center:9000  
@@ -240,7 +240,7 @@ services:
         "apk add --no-cache bash jq && /bin/bash /create_default_user.sh",
       ]
     volumes:
-      - ./scripts/create_default_user.sh:/create_default_user.sh
+      - ./scripts/create_default_user_fixed.sh:/create_default_user.sh
     networks:
       - router_net
   

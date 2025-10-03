@@ -75,6 +75,7 @@ services:
       - ./:/app
       - cargo_cache:/cargo_cache
       - router_build_cache:/cargo_build_cache
+      - ./scripts/create_default_user.sh:/create_default_user.sh
     environment:
       - CARGO_HOME=/cargo_cache
       - CARGO_TARGET_DIR=/cargo_build_cache

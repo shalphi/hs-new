@@ -163,6 +163,7 @@ pub struct Riskified2Metadata {
     vendor_name: String,
     shipping_lines: Vec<ShippingLines>,
 }
+use router_env::logger;
 
 impl TryFrom<&Riskified2RouterData<&FrmCheckoutRouterData>> for Riskified2PaymentsCheckoutRequest {
     type Error = Error;
@@ -170,6 +171,7 @@ impl TryFrom<&Riskified2RouterData<&FrmCheckoutRouterData>> for Riskified2Paymen
         payment: &Riskified2RouterData<&FrmCheckoutRouterData>,
     ) -> Result<Self, Self::Error> {
         let payment_data = payment.router_data.clone();
+        logger::debug!(?payment_data, "riskified2: payment_data before metadata parsing");
         let metadata: Riskified2Metadata = payment_data
             .frm_metadata
             .clone()

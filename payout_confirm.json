@@ -1,0 +1,12 @@
+{
+    "payout_type": "card",
+    "connector": ["stripe"],
+    "payout_method_data": {
+        "card": {
+            "card_number": "4111111111111111",
+            "expiry_month": "3",
+            "expiry_year": "2030",
+            "card_holder_name": "John Doe"
+        }
+    }
+}
